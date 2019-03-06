@@ -8,4 +8,5 @@ import com.hurenjieee.springboot.demo.entity.User;
  * @date 2019/3/4 16:35
  */
 public interface UserMapper extends BaseMapper<User> {
+
 }

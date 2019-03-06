@@ -12,11 +12,10 @@ import lombok.Data;
  * @date 2019/3/4 16:28
  */
 @Data
-@KeySequence("SEQ_USER")
 @TableName("user")
 public class User {
 
-    @TableId(value = "id", type = IdType.INPUT)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     private String name;
     private Integer age;

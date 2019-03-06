@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+
+    <!-- Log4j建议只使用四个级别，优先级从高到低分别是 ERROR、WARN、INFO、DEBUG -->
+    <Properties>
+        <property name="log_pattern">%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n</property>
+        <property name="base_path">D:/log</property>
+
+        <property name="record_log">${base_path}/record/record.log</property>
+        <property name="error_log">${base_path}/error/error.log</property>
+        <property name="rolling_file_record_log">${base_path}/rolling_file/record/%d{yyyy-MM-dd}-%i.log</property>
+        <property name="rolling_file_error_log">${base_path}/rolling_file/error/%d{yyyy-MM-dd}-%i.log</property>
+    </Properties>
+
+    <!-- 先定义所有的appender -->
+    <appenders>
+        <!-- 控制台打印日志 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="debug" onMatch="NEUTRAL" onMismatch="ACCEPT" />
+            <PatternLayout pattern="${log_pattern}" />
+        </Console>
+
+        <!-- 某次运行日志 -->
+        <File name="log" fileName="${base_path}/lastLog.log" append="false">
+            <PatternLayout pattern="${log_pattern}"/>
+        </File>
+
+        <!-- fileName  指定当前日志文件的位置和文件名称 filePattern  指定当发生Rolling时，文件的转移和重命名规则 -->
+        <RollingFile name="RECORD" filename="${record_log}" filePattern="${rolling_file_record_log}" append="true">
+            <Filters>
+                <!-- 筛选仅为RECORD的Marker日志 -->
+                <MarkerFilter marker="RECORD" onMatch="ACCEPT" onMismatch="DENY"/>
+                <!-- 筛选日志级别，匹配INFO级别以及以上级别,不匹配INFO级别以下级别,即: 匹配 >= INFO的级别 -->
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <Pattern>${log_pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <SizeBasedTriggeringPolicy size="10MB" />
+        </RollingFile>
+
+        <RollingFile name="ERROR" filename="${error_log}" filePattern="${rolling_file_error_log}" append="true">
+            <Filters>
+                <!-- 筛选仅为ERROR的Marker日志 -->
+                <MarkerFilter marker="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+                <!-- 筛选日志级别，匹配INFO级别以及以上级别,不匹配WARN级别以下级别,即: 匹配 >= WARN的级别 -->
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <Pattern>${log_pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <SizeBasedTriggeringPolicy size="10MB" />
+        </RollingFile>
+
+    </appenders>
+
+    <!--     然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <loggers>
+        <!--         建立一个默认的root的logger -->
+        <root level="INFO">
+            <appender-ref ref="ERROR" />
+            <appender-ref ref="log" />
+            <appender-ref ref="Console" />
+            <appender-ref ref="RECORD" />
+        </root>
+    </loggers>
+</configuration>
