@@ -35,12 +35,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public String exception(Exception e, WebRequest request) {
-        logger.error(errorMarker,"【异常】",e);
-            HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-        long startTime = (Long)httpServletRequest.getAttribute(START_TIME);
-        httpServletRequest.removeAttribute(START_TIME);
-        long endTime = System.currentTimeMillis();
-        logger.info(recordMarker,"URL:" + httpServletRequest.getRequestURL() + ";time:" + (endTime - startTime));
+        logger.error(errorMarker,"【请求发生异常】",e);
         return "error";
     }
 
