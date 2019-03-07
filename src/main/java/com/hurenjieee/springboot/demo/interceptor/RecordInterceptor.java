@@ -30,7 +30,7 @@ public class RecordInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         long startTime = System.currentTimeMillis();
         request.setAttribute(START_TIME, startTime);
-        logger.info(recordMarker, "SessionId:{};URL:{};param:{}", request.getSession().getId(), request.getRequestURL(), JSON.toJSONString(request.getParameterMap()));
+        logger.info(recordMarker, "SessionId:{};RequestId:{};URL:{};param:{}", request.getSession().getId(), startTime, request.getRequestURL(), JSON.toJSONString(request.getParameterMap()));
         return true;
     }
 
@@ -39,6 +39,6 @@ public class RecordInterceptor implements HandlerInterceptor {
         long startTime = (Long) request.getAttribute(START_TIME);
         request.removeAttribute(START_TIME);
         long endTime = System.currentTimeMillis();
-        logger.info(recordMarker, "SessionId:{};URL:{};Time:{}", request.getSession().getId(), request.getRequestURL(), (endTime - startTime));
+        logger.info(recordMarker, "SessionId:{};RequestId:{};ExecuteTime:{}", request.getSession().getId(), startTime, request, endTime - startTime);
     }
 }

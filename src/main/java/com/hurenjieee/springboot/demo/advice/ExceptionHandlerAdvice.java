@@ -7,6 +7,7 @@ import org.apache.logging.log4j.MarkerManager;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 异常处理类
+ *
  * @author Jack
  */
 @ControllerAdvice
@@ -35,7 +37,11 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public String exception(Exception e, WebRequest request) {
-        logger.error(errorMarker,"【请求发生异常】",e);
+        long startTime = (Long) request.getAttribute(START_TIME, RequestAttributes.SCOPE_REQUEST);
+        request.removeAttribute(START_TIME, RequestAttributes.SCOPE_REQUEST);
+        long endTime = System.currentTimeMillis();
+        logger.error(errorMarker, "【请求异常】", e);
+        logger.info(recordMarker, "SessionId:{};RequestId:{};Time:{}", request.getSessionId(), startTime, (endTime - startTime));
         return "error";
     }
 
