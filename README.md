@@ -6,3 +6,4 @@
 - jasypt 配置文件加密
 - mybatis plus generator 集成
 - log4j2 集成
+- mail 邮件集成
