@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demo/test")
 public class TestController {
 
-
     @RequestMapping("/exception")
     public void exception(){
         int i = 1/0;
