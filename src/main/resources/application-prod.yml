@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    url: ENC(vUGquzII91+Xz8+FINwmIZeFRpVuwLhRgBYiXqzxeaVDWLRSg8CsbVPWDhKo1qF1d+htf4alKQYsrDYlqF6bAia/cgo9xC6OQ+pCv5+Mx4FjFhB9aLotPirHRWwbtYcD)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ENC(XJVFulLq+6/en5E5frx4gQ==)
+    password: ENC(ddhISn9Bn8qRjnW6WOFy3A==)
+  mail:
+    host: smtp.qq.com
+    username: 1092465834@qq.com
+    password: ENC(oxkdtj0IFBCJeb7F9TYybD/hnMBFauysy8aq8AhtD0U=)
+    default-encoding: UTF-8
+  redis:
+    host: 127.0.0.1
+    port: 6379
+jasypt:
+  encryptor:
+    password: com.hurenjieee.demo
+logging:
+  config: classpath:log4j2-dev.xml
+mail:
+  fromMail:
+    addr: 1092465834@qq.com
