@@ -1,7 +1,9 @@
 package com.hurenjieee.springboot.demo;
 
+import com.hurenjieee.springboot.demo.entity.Book;
 import com.hurenjieee.springboot.demo.entity.User;
 import com.hurenjieee.springboot.demo.mapper.UserMapper;
+import com.hurenjieee.springboot.demo.service.IBookService;
 import com.hurenjieee.springboot.demo.service.IMailService;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Assert;
@@ -10,11 +12,18 @@ import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @MapperScan("com.hurenjieee.springboot.demo.mapper")
@@ -91,4 +100,44 @@ public class DemoApplicationTests {
 
         mailService.sendHtmlMail("1092465834@qq.com","主题：这是模板邮件",emailContent);
     }
+
+
+    @Autowired
+    IBookService bookService;
+
+    @Test
+    public void insertBooks(){
+        int THREAD_SIZE = 100;
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_SIZE);
+        for(int i = 0; i  < THREAD_SIZE ;i++){
+            executor.execute(new Task(i));
+        }
+        while (true){
+
+        }
+    }
+
+    class Task implements Runnable{
+
+        private Integer type;
+
+        public Task(Integer type) {
+            this.type = type;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                int num = new Random().nextInt(20);
+                Book book = new Book();
+                book.setBookName("name" + num);
+                book.setBookAuther("auther" + num);
+                book.setBookContent("this is content" + num);
+                book.setBookCreateDate(LocalDateTime.now());
+                book.setBookType("type" + type);
+                bookService.save(book);
+            }
+        }
+    }
+
 }

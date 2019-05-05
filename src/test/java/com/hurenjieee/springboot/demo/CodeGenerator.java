@@ -25,11 +25,11 @@ public class CodeGenerator {
     // Config
     public static final String URL = "jdbc:mysql://localhost:3306/demo?useUnicode=true&useSSL=false&characterEncoding=utf8";
 
-    public static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
+    public static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
 
     public static final String USER_NAME = "root";
 
-    public static final String PASSWORD = "123456";
+    public static final String PASSWORD = "hrj19941205";
 
 
     // Mapper
@@ -45,7 +45,7 @@ public class CodeGenerator {
 
 
     // Tables
-    public static final String[] TABLES = new String[]{"test"};
+    public static final String[] TABLES = new String[]{"book"};
 
 
     public static void main(String[] args) {
