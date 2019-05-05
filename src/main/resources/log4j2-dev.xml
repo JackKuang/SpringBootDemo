@@ -8,10 +8,10 @@
 
         <property name="record_log">${base_path}/record/record.log</property>
         <property name="error_log">${base_path}/error/error.log</property>
-        <property name="mail_log">${base_path}/mail/mail.log</property>
+        <property name="other_log">${base_path}/other/other.log</property>
         <property name="rolling_file_record_log">${base_path}/rolling_file/record/%d{yyyy-MM-dd}-%i.log</property>
         <property name="rolling_file_error_log">${base_path}/rolling_file/error/%d{yyyy-MM-dd}-%i.log</property>
-        <property name="rolling_file_mail_log">${base_path}/rolling_file/mail/%d{yyyy-MM-dd}-%i.log</property>
+        <property name="rolling_file_other_log">${base_path}/rolling_file/other/%d{yyyy-MM-dd}-%i.log</property>
     </Properties>
 
     <!-- 先定义所有的appender -->
@@ -61,10 +61,10 @@
         </RollingFile>
 
         <!-- fileName  指定当前日志文件的位置和文件名称 filePattern  指定当发生Rolling时，文件的转移和重命名规则 -->
-        <RollingFile name="MAIL" filename="${mail_log}" filePattern="${rolling_file_mail_log}" append="true">
+        <RollingFile name="OTHER" filename="${other_log}" filePattern="${rolling_file_other_log}" append="true">
             <Filters>
                 <!-- 筛选仅为RECORD的Marker日志 -->
-                <MarkerFilter marker="MAIL" onMatch="ACCEPT" onMismatch="DENY"/>
+                <MarkerFilter marker="OTHER" onMatch="ACCEPT" onMismatch="DENY"/>
                 <!-- 筛选日志级别，匹配DEBUG级别以及以上级别,不匹配INFO级别以下级别,即: 匹配 >= INFO的级别 -->
                 <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
@@ -87,7 +87,7 @@
             <appender-ref ref="log" />
             <appender-ref ref="Console" />
             <appender-ref ref="RECORD" />
-            <appender-ref ref="MAIL" />
+            <appender-ref ref="OTHER" />
         </root>
     </loggers>
 </configuration>

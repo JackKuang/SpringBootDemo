@@ -26,7 +26,7 @@ import java.io.File;
 @Service
 public class MailServiceImpl implements IMailService {
 
-    private Marker mailMarker = MarkerManager.getMarker("MAIL");
+    private Marker errorMarker = MarkerManager.getMarker("ERROR");
     private Logger logger = LogManager.getLogger(this.getClass());
 
     @Autowired
@@ -45,7 +45,7 @@ public class MailServiceImpl implements IMailService {
         try {
             mailSender.send(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(errorMarker, "【发送邮件异常】", e);
         }
     }
 
@@ -56,7 +56,7 @@ public class MailServiceImpl implements IMailService {
             buildHelper(message, to, subject, content);
             mailSender.send(message);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error(errorMarker, "【发送邮件异常】", e);
         }
     }
 
@@ -70,7 +70,7 @@ public class MailServiceImpl implements IMailService {
             helper.addAttachment(fileName, file);
             mailSender.send(message);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error(errorMarker, "【发送邮件异常】", e);
         }
     }
 
@@ -83,7 +83,7 @@ public class MailServiceImpl implements IMailService {
             helper.addInline(rscId, res);
             mailSender.send(message);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error(errorMarker, "【发送邮件异常】", e);
         }
     }
 

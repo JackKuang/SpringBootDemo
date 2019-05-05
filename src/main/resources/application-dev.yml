@@ -25,3 +25,7 @@ mail:
   fromMail:
     addr: 1092465834@qq.com
 debug: true
+aliyun:
+  accessKeyId: LTAIXsjQNrr1G5kE
+  key: qyEEUlTH82h5GA5WpP29Z3CxNE7SL1&
+  dimainName: hurenjieee.com
