@@ -2,6 +2,7 @@ package com.hurenjieee.springboot.demo.service;
 
 /**
  * 邮件Service
+ * @author Jack
  */
 public interface IMailService {
 
