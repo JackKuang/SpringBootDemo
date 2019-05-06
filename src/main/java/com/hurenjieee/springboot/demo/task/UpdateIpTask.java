@@ -1,8 +1,10 @@
 package com.hurenjieee.springboot.demo.task;
 
+import com.hurenjieee.springboot.demo.service.IMailService;
 import com.hurenjieee.springboot.demo.service.IUpdateIpService;
 import com.hurenjieee.springboot.demo.util.IPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,15 +28,22 @@ public class UpdateIpTask {
     @Autowired
     private IUpdateIpService updateIpService;
 
+    @Autowired
+    private IMailService mailService;
+
+    @Value("${mail.toMail.addr}")
+    private String toMailAddr;
+
     public static final String LAST_IP = "LAST_IP";
 
     @Scheduled(fixedDelay = 1000,initialDelay = 10000)
     public void updateIp() throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
         String oldIpString = (String)redisTemplate.opsForValue().get(LAST_IP);
         String ipString = IPUtil.getIP();
-        if (true) {
+        if (ipString.equals(oldIpString)) {
             redisTemplate.opsForValue().set(LAST_IP,ipString);
             updateIpService.updateIp(ipString);
+            mailService.sendSimpleMail(toMailAddr,"【服务IP变更通知】",ipString);
         }
     }
 }

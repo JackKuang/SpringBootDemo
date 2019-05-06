@@ -24,6 +24,8 @@ logging:
 mail:
   fromMail:
     addr: 1092465834@qq.com
+  toMail:
+    addr: 1092465834@qq.com
 debug: true
 aliyun:
   accessKeyId: LTAIXsjQNrr1G5kE
