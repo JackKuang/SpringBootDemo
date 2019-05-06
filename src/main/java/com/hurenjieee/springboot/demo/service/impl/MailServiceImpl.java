@@ -100,6 +100,6 @@ public class MailServiceImpl implements IMailService {
     public void sendSimpleMailForException(String to, String subject, Throwable t) {
         ByteArrayOutputStream buf = new java.io.ByteArrayOutputStream();
         t.printStackTrace(new java.io.PrintWriter(buf, true));
-        this.sendSimpleMail("1092465834@qq.com","【demo异常邮件】", buf.toString());
+        this.sendSimpleMail(to,"【demo异常邮件】", buf.toString());
     }
 }
