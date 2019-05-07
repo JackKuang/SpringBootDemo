@@ -1,15 +1,12 @@
 package com.hurenjieee.springboot.demo.lock.impl;
 
-import com.hurenjieee.springboot.demo.lock.Lock;
+import com.hurenjieee.springboot.demo.lock.ILock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +18,8 @@ import java.util.concurrent.TimeUnit;
  * @author Jack
  * @date 2019/5/6 11:19
  */
-@Service
-public class RedisLock implements Lock {
+@Service("redisLock")
+public class RedisLock implements ILock {
 
     @Autowired
     private RedisTemplate redisTemplate;

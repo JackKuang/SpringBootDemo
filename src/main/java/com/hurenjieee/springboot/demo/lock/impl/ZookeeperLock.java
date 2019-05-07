@@ -1,7 +1,5 @@
 package com.hurenjieee.springboot.demo.lock.impl;
 
-import com.hurenjieee.springboot.demo.lock.Lock;
-
 
 /**
  * 数据库分布式锁

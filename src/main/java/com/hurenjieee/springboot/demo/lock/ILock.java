@@ -1,6 +1,6 @@
 package com.hurenjieee.springboot.demo.lock;
 
-public interface Lock {
+public interface ILock {
 
     /**
      * 获取锁
