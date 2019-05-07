@@ -1,11 +1,18 @@
 package com.hurenjieee.springboot.demo.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hurenjieee.springboot.demo.interceptor.RecordInterceptor;
-import com.ulisesbocchio.jasyptspringboot.annotation.ConditionalOnMissingBean;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -42,48 +49,23 @@ public class DemoMvcConfig implements WebMvcConfigurer {
     }
 
 
-
     @Bean
-    public MatherService matherService(){
-        //调用同一个bean
-        return new MatherService(sonService());
-    }
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 
-    @Bean
-    public FatherService fatherService(){
-        //调用同一个bean
-        return new FatherService(sonService());
-    }
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        RedisTemplate<Object, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
 
-    @Bean SonService sonService(){
-        //只会执行一次
-        return  new SonService();
-    }
-
-
-
-    class MatherService{
-
-        SonService sonService;
-
-        public MatherService(SonService sonService) {
-            this.sonService = sonService;
-            System.out.println("motherSerivce init"+sonService);
-        }
-    }
-
-    class FatherService{
-        SonService sonService;
-
-        public FatherService(SonService sonService) {
-            this.sonService = sonService;
-            System.out.println("fatherService init"+sonService);
-        }
-    }
-
-    class SonService{
-        public SonService() {
-            System.out.println("sonService init");
-        }
+        //template.setKeySerializer(jackson2JsonRedisSerializer);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(jackson2JsonRedisSerializer);
+        template.setHashKeySerializer(jackson2JsonRedisSerializer);
+        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        template.afterPropertiesSet();
+        return template;
     }
 }

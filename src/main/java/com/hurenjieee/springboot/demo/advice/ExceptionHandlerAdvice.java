@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +31,9 @@ public class ExceptionHandlerAdvice {
     private Marker errorMarker = MarkerManager.getMarker("ERROR");
     private Logger logger = LogManager.getLogger(getClass());
 
+    @Value("${mail.toMail.addr}")
+    private String toMailAddr;
+
     @Autowired
     IMailService mailService;
 
@@ -48,7 +52,7 @@ public class ExceptionHandlerAdvice {
         long endTime = System.currentTimeMillis();
         logger.error(errorMarker, "【请求异常】", e);
         logger.info(recordMarker, "SessionId:{};RequestId:{};Time:{}", request.getSessionId(), startTime, (endTime - startTime));
-        mailService.sendSimpleMailForException("1092465834@qq.com","【demo异常邮件】",e);
+        mailService.sendSimpleMailForException(toMailAddr,"【demo异常邮件】",e);
         return "error";
     }
 
