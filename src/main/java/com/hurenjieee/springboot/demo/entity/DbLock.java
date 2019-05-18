@@ -30,14 +30,11 @@ public class DbLock implements Serializable {
 
     private String lockValue;
 
-    private Integer lockStatus;
-
     private LocalDateTime createTime;
 
     public DbLock(String lockKey, String lockValue) {
         this.lockKey = lockKey;
         this.lockValue = lockValue;
-        this.lockStatus = 1;
         this.createTime = LocalDateTime.now();
     }
 }

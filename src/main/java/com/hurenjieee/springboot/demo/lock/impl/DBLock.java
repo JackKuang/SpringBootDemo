@@ -20,19 +20,23 @@ import javax.annotation.Resource;
 @Service("dbLock")
 public class DBLock implements ILock {
 
+    /**
+     * init Sql
+     * CREATE TABLE `db_lock` (
+     *   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+     *   `lock_key` varchar(255) DEFAULT NULL COMMENT 'Key',
+     *   `lock_value` varchar(255) DEFAULT NULL COMMENT 'Value',
+     *   `create_time` datetime DEFAULT NULL,
+     *   PRIMARY KEY (`id`),
+     *   UNIQUE KEY `u_lock_key` (`lock_key`) USING BTREE COMMENT '唯一索引'
+     * ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+     */
     @Resource
     DbLockMapper dbLockMapper;
 
     @Override
     public synchronized boolean lock(String key, String value, Long time) {
         try {
-            QueryWrapper<DbLock> wrapper = new QueryWrapper<DbLock>();
-            wrapper.lambda().eq(DbLock::getLockKey, key)
-                    .eq(DbLock::getLockStatus, 1);
-            int count = dbLockMapper.selectCount(wrapper);
-            if (count > 0) {
-                return false;
-            }
             DbLock lock = new DbLock(key, value);
             int insertNum = dbLockMapper.insert(lock);
             if (insertNum > 0) {
@@ -48,14 +52,8 @@ public class DBLock implements ILock {
         try {
             QueryWrapper<DbLock> wrapper = new QueryWrapper<DbLock>();
             wrapper.lambda().eq(DbLock::getLockKey, key)
-                    .eq(DbLock::getLockValue, value)
-                    .eq(DbLock::getLockStatus, 1);
-            DbLock lock = dbLockMapper.selectOne(wrapper);
-            if (lock == null) {
-                return false;
-            }
-            lock.setLockStatus(2);
-            int updateNum = dbLockMapper.updateById(lock);
+                    .eq(DbLock::getLockValue, value);
+            int updateNum = dbLockMapper.delete(wrapper);
             if (updateNum > 0) {
                 return true;
             }

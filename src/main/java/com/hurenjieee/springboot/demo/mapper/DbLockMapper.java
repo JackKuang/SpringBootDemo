@@ -11,10 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Jack
  * @since 2019-05-07
  */
-public interface
-
-
-
-DbLockMapper extends BaseMapper<DbLock> {
+public interface DbLockMapper extends BaseMapper<DbLock> {
 
 }
